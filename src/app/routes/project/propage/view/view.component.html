@@ -1,13 +1,22 @@
 <div class="modal-header">
   <div class="modal-title">查看 {{ record.id }} 信息</div>
 </div>
-<nz-spin *ngIf="!i" class="modal-spin"></nz-spin>
-<div sv-container *ngIf="i">
-  <sv label="姓名">{{ i.owner }}</sv>
-  <sv label="会员卡号">32943898021309809423</sv>
-  <sv label="身份证">3321944288191034921</sv>
-  <sv label="联系方式">18112345678</sv>
-  <sv label="联系地址">曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口</sv>
+<nz-spin *ngIf="!viewUser" class="modal-spin"></nz-spin>
+<div sv-container *ngIf="viewUser">
+  <sv label="PROJECT_NAME">{{ viewUser.proId }}</sv>
+  <sv label="PMO">{{viewUser.pmo}}</sv>
+  <sv label="SPONSOR">{{viewUser.sponsor}}</sv>
+  <sv label="TECHNOLOGY">{{viewUser.technology}}</sv>
+  <sv label="CUSTOMER">{{viewUser.customer}}</sv>
+  <sv label="APPLICATION">{{viewUser.application}}</sv>
+  <sv label="KEY_WORDS">{{viewUser.keyWords}}</sv>
+  <sv label="FILE_PATH">{{viewUser.filePath}}</sv>
+  <sv label="M0_STATUS">{{viewUser.m0Status}}</sv>
+  <sv label="T0_STATUS">{{viewUser.m0Status}}</sv>
+  <sv label="T1_STATUS">{{viewUser.m0Status}}</sv>
+  <sv label="T2_STATUS">{{viewUser.m0Status}}</sv>
+  <sv label="CREATE_TIME">{{viewUser.createTime}}</sv>
+  <sv label="UPDATE_TIME">{{viewUser.updateTime}}</sv>
 </div>
 <div class="modal-footer">
   <button nz-button type="button" (click)="close()">关闭</button>

@@ -5,5 +5,14 @@
 </page-header>
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
-  <st #st [data]="url" [columns]="columns"></st>
+  <st #st [data]="url" [columns]="columns">
+    <ng-template st-row="noTpl" let-item let-index="index">
+      <input *ngIf="item.edit" nz-input [ngModel]="item.no" (ngModelChange)="st.setRow(index, { no: $event })" />
+      <ng-container *ngIf="!item.edit">{{ item.no }}</ng-container>
+    </ng-template>
+    <ng-template st-row="callNoTpl" let-item let-index="index">
+      <input *ngIf="item.edit" nz-input [ngModel]="item.callNo" (ngModelChange)="st.setRow(index, { callNo: $event })" />
+      <ng-container *ngIf="!item.edit">{{ item.callNo }}</ng-container>
+    </ng-template>
+  </st>
 </nz-card>

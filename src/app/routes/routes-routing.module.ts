@@ -21,7 +21,7 @@ const routes: Routes = [
     component: LayoutBasicComponent,
     canActivate: [SimpleGuard],
     children: [
-      {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      {path: '', redirectTo: 'project/propage', pathMatch: 'full'},
       {path: 'dashboard', component: DashboardComponent, data: {title: '仪表盘'}},
       {path: 'exception', loadChildren: () => import('./exception/exception.module').then(m => m.ExceptionModule)},
       // 业务子模块

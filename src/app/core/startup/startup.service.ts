@@ -33,7 +33,7 @@ export class StartupService {
     iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
   }
 
-  
+
     private viaHttp(): Observable<void> {
       const defaultLang = this.i18n.defaultLang;
       return zip(this.i18n.loadLangData(defaultLang), this.httpClient.get('assets/tmp/app-data.json')).pipe(
@@ -60,9 +60,9 @@ export class StartupService {
         })
       );
     }
-  
 
-  
+
+
   private viaMockI18n(): Observable<void> {
     const defaultLang = this.i18n.defaultLang;
     return this.i18n.loadLangData(defaultLang).pipe(
@@ -73,7 +73,7 @@ export class StartupService {
         })
       );
   }
-  
+
   private viaMock(): Observable<void> {
     // const tokenData = this.tokenService.get();
     // if (!tokenData.token) {
@@ -82,8 +82,8 @@ export class StartupService {
     // }
     // mock
     const app: any = {
-      name: `ng-alain`,
-      description: `Ng-zorro admin panel front-end framework`
+      name: `qqchen`,
+      description: `this is qqchen desc!!!`
     };
     const user: any = {
       name: 'Admin',
@@ -119,9 +119,9 @@ export class StartupService {
 
   load(): Observable<void> {
     // http
-    // return this.viaHttp();
+    return this.viaHttp();
     // mock: Don’t use it in a production environment. ViaMock is just to simulate some data to make the scaffolding work normally
     // mock：请勿在生产环境中这么使用，viaMock 单纯只是为了模拟一些数据使脚手架一开始能正常运行
-    return this.viaMockI18n();
+    // return this.viaMockI18n();
   }
 }

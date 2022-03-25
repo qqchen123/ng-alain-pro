@@ -10,7 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   templateUrl: './editpage.component.html',
 })
 export class SysEditpageComponent implements OnInit {
-
+  record: any = {};
   // id = this.route.snapshot.params.id;
   id = this.route.snapshot.params;
   i: any;
@@ -49,9 +49,14 @@ export class SysEditpageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('--')
+    console.log(this.id)
+    console.log(11)
+    console.log('---')
+
     // if (this.id > 0)
-    // this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
-    this.http.get(`/user/1`).subscribe(res => (this.i = res));
+    this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
+    // this.http.get(`/user/1`).subscribe(res => (this.i = res));
   }
 
   save(value: any): void {
