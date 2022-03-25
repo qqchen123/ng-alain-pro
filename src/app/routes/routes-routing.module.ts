@@ -28,7 +28,7 @@ const routes: Routes = [
       // { path: 'widgets', loadChildren: () => import('./widgets/widgets.module').then(m => m.WidgetsModule) },
       {path: 'sys', loadChildren: () => import('./sys/sys.module').then((m) => m.SysModule)},
       {path: 'project', loadChildren: () => import('./project/project.module').then((m) => m.ProjectModule)}
-    ]
+      , {path: 'category', loadChildren: () => import('./category/category.module').then((m) => m.CategoryModule)}]
   },
   // 空白布局
   // {
