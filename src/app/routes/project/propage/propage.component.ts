@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {STColumn, STComponent} from '@delon/abc/st';
+import {STColumn, STComponent, STData, STPage} from '@delon/abc/st';
 import {SFSchema} from '@delon/form';
 import {ModalHelper, _HttpClient} from '@delon/theme';
 import {ProjectPropageEditComponent} from "./edit/edit.component";
@@ -10,7 +10,19 @@ import {ProjectPropageViewComponent} from "./view/view.component";
   templateUrl: './propage.component.html',
 })
 export class ProjectPropageComponent implements OnInit {
-  url: any = '';
+  url: any[] = [];
+  pi: any = 1;
+  ps: any = 10;
+  total: any;
+
+  pageInfo: STPage = {
+    front: false,
+    total: false,
+    pageSizes: [10, 20, 30, 40, 50],
+    showSize: true,
+    showQuickJumper: true
+  }
+
   searchSchema: SFSchema = {
     properties: {
       no: {
@@ -36,13 +48,14 @@ export class ProjectPropageComponent implements OnInit {
         // {text: '查看', click: (item: any) => `/form/${item.id}`},
         {text: '查看', click: (item: any) => this.view(item)},
         // {text: '编辑', type: 'static', component: ProjectPropageEditComponent, click: 'reload'},
-        {text: '编辑', click: (item:any)=> this.edit(item)},
+        {text: '编辑', click: (item: any) => this.edit(item)},
+        {text: '删除', click: (item: any) => this.delete(item)},
       ]
     }
   ];
 
   constructor(private http: _HttpClient, private modal: ModalHelper) {
-    this.http.get('http://localhost:8080/api/project/getProjectList').subscribe((res: any) => {
+    this.http.get(`http://localhost:8080/api/project/getProjectList?pageNum=${this.pi}&pageSize=${this.ps}`).subscribe((res: any) => {
       // console.log(res)
       this.url = Array(res.data.list.length).fill({}).map((item: any, idx: number) => {
         return {
@@ -56,11 +69,37 @@ export class ProjectPropageComponent implements OnInit {
           createTime: res.data.list[idx].createTime,
           updateTime: res.data.list[idx].updateTime
         }
-      })
+      });
+      this.total = res.data.total;
+      this.ps = res.data.pageSize;
+      this.pi = res.data.pageNum;
     })
   }
 
   ngOnInit(): void {
+  }
+
+  change(e: any) {
+    if (e.type == 'pi') {
+      this.http.get(`http://localhost:8080/api/project/getProjectList?pageNum=${e.pi}&pageSize=${e.ps}`).subscribe((res: any) => {
+        this.url = Array(res.data.list.length).fill({}).map((item: any, idx: number) => {
+          return {
+            proId: res.data.list[idx].proId,
+            projectName: res.data.list[idx].projectName,
+            pmo: res.data.list[idx].pmo,
+            sponsor: res.data.list[idx].sponsor,
+            technology: res.data.list[idx].technology,
+            customer: res.data.list[idx].customer,
+            application: res.data.list[idx].application,
+            createTime: res.data.list[idx].createTime,
+            updateTime: res.data.list[idx].updateTime
+          }
+        });
+        this.total = res.data.total;
+        this.ps = res.data.pageSize;
+        this.pi = res.data.pageNum;
+      })
+    }
   }
 
   add(): void {
@@ -69,7 +108,7 @@ export class ProjectPropageComponent implements OnInit {
       .subscribe(() => this.st.reload());
   }
 
-  edit(item:any): void {
+  edit(item: any): void {
     console.log(item)
     this.modal
       .createStatic(ProjectPropageEditComponent, {record: {id: item.proId}})
@@ -83,4 +122,9 @@ export class ProjectPropageComponent implements OnInit {
       .subscribe(() => this.st.reload());
   }
 
+  private delete(item: any) {
+    this.http.post(`http://localhost:8080/api/project/delete/${item.proId}`).subscribe((res: any) => {
+      this.st.reload();
+    })
+  }
 }

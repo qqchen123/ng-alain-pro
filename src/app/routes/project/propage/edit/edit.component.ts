@@ -63,7 +63,7 @@ export class ProjectPropageEditComponent implements OnInit {
   }
 
   save(value: any): void {
-    this.http.post(`/user/${this.record.id}`, value).subscribe(res => {
+    this.http.post(`http://localhost:8080/api/project/editPro`, value).subscribe(res => {
       this.msgSrv.success('保存成功');
       this.modal.close(true);
     });
