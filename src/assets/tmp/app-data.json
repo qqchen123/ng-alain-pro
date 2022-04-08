@@ -10,13 +10,13 @@
   },
   "menu": [
     {
-      "text": "主导航",
+      "text": "主导航1",
       "i18n": "menu.main",
       "group": true,
       "hideInBreadcrumb": true,
       "children": [
         {
-          "text": "仪表盘",
+          "text": "仪表盘2",
           "i18n": "menu.dashboard",
           "icon": "anticon-dashboard",
           "children": [
@@ -50,9 +50,21 @@
           "children": []
         },
         {
-          "text": "小部件",
-          "i18n": "menu.widgets",
-          "link": "/widgets",
+          "text": "项目列表",
+          "link": "/category/propage",
+          "icon": "anticon-appstore",
+          "badge": 2
+        },
+        {
+          "text": "分类列表",
+          "link": "/cates/propage",
+          "icon": "anticon-appstore",
+          "badge": 2
+        }
+      ,
+        {
+          "text": "项目详情",
+          "link": "/projectdetails/propage",
           "icon": "anticon-appstore",
           "badge": 2
         }

@@ -1,7 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {STColumn, STComponent, STPage, STReq, STRes} from '@delon/abc/st';
-import {SFSchema} from '@delon/form';
+import {SFDateWidgetSchema, SFSchema} from '@delon/form';
 import {ModalHelper, _HttpClient} from '@delon/theme';
+import { subWeeks } from 'date-fns';
+import {CategoryPropageEditComponent} from "./edit/edit.component";
 
 @Component({
   selector: 'app-category-propage',
@@ -29,10 +31,19 @@ export class CategoryPropageComponent implements OnInit {
 
   searchSchema: SFSchema = {
     properties: {
-      no: {
+      projectName: {
         type: 'string',
         title: '编号'
-      }
+      },
+      start:{
+        type: 'string',
+        ui: { widget: 'date', mode: 'range',end:'end',format:'yyyy/MM/dd HH:mm:ss',type:'datetime-local' } as SFDateWidgetSchema,
+      },
+
+      end: {
+        type: 'string',
+        default: subWeeks(new Date(), 6),
+      },
     }
   };
   @ViewChild('st') private readonly st!: STComponent;
@@ -62,9 +73,9 @@ export class CategoryPropageComponent implements OnInit {
   }
 
   add(): void {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+    this.modal
+      .createStatic(CategoryPropageEditComponent, { i: { id: 0 } })
+      .subscribe(() => this.st.reload());
   }
 
 }

@@ -21,14 +21,22 @@ const routes: Routes = [
     component: LayoutBasicComponent,
     canActivate: [SimpleGuard],
     children: [
-      {path: '', redirectTo: 'project/propage', pathMatch: 'full'},
+      {path: '', redirectTo: 'category/propage', pathMatch: 'full'},
       {path: 'dashboard', component: DashboardComponent, data: {title: '仪表盘'}},
       {path: 'exception', loadChildren: () => import('./exception/exception.module').then(m => m.ExceptionModule)},
       // 业务子模块
       // { path: 'widgets', loadChildren: () => import('./widgets/widgets.module').then(m => m.WidgetsModule) },
       {path: 'sys', loadChildren: () => import('./sys/sys.module').then((m) => m.SysModule)},
-      {path: 'project', loadChildren: () => import('./project/project.module').then((m) => m.ProjectModule)}
-      , {path: 'category', loadChildren: () => import('./category/category.module').then((m) => m.CategoryModule)}]
+      {path: 'project', loadChildren: () => import('./project/project.module').then((m) => m.ProjectModule)},
+      {path: 'category', loadChildren: () => import('./category/category.module').then((m) => m.CategoryModule)},
+      {path: 'cates', loadChildren: () => import('./cates/cates.module').then((m) => m.CatesModule)},
+      {path: 'file', loadChildren: () => import('./file/file.module').then((m) => m.FileModule)},
+      {path: 'material', loadChildren: () => import('./material/material.module').then((m) => m.MaterialModule)},
+      {path: 'procedure', loadChildren: () => import('./procedure/procedure.module').then((m) => m.ProcedureModule)},
+      {
+        path: 'projectdetails',
+        loadChildren: () => import('./projectdetails/projectdetails.module').then((m) => m.ProjectdetailsModule)
+      }]
   },
   // 空白布局
   // {

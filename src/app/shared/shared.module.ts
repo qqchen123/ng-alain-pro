@@ -8,6 +8,7 @@ import { DelonFormModule } from '@delon/form';
 
 import { SHARED_DELON_MODULES } from './shared-delon.module';
 import { SHARED_ZORRO_MODULES } from './shared-zorro.module';
+import {MaterialPropageComponent} from "../routes/material/propage/propage.component";
 
 // #region third libs
 
@@ -17,7 +18,9 @@ const THIRDMODULES: Array<Type<void>> = [];
 
 // #region your componets & directives
 
-const COMPONENTS: Array<Type<void>> = [];
+const COMPONENTS: Array<Type<void>> = [
+
+];
 const DIRECTIVES: Array<Type<void>> = [];
 
 // #endregion
@@ -39,7 +42,8 @@ const DIRECTIVES: Array<Type<void>> = [];
   declarations: [
     // your components
     ...COMPONENTS,
-    ...DIRECTIVES
+    ...DIRECTIVES,
+
   ],
   exports: [
     CommonModule,

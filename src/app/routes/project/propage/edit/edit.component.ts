@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SFSchema, SFUISchema} from '@delon/form';
+import {SFSchema, SFUISchema, SFUploadWidgetSchema} from '@delon/form';
 import {_HttpClient} from '@delon/theme';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalRef} from 'ng-zorro-antd/modal';
@@ -23,8 +23,38 @@ export class ProjectPropageEditComponent implements OnInit {
       customer: {type: 'string', title: 'CUSTOMER', maxLength: 140},
       application: {type: 'string', title: 'APPLICATION', maxLength: 140},
       keyWords: {type: 'string', title: 'KEY_WORDS', maxLength: 140},
-      filePath: {type: 'string', title: 'ATTACH_FILE', format: 'uri'},
-
+      filePath: {
+        type: 'string',
+        title: 'ATTACH_FILE',
+        limit:1,
+        enum: [
+          {
+            uid: -1,
+            name: 'xxx.png',
+            status: 'done',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            response: {
+              resource_id: 1,
+            },
+          },
+        ],
+        ui: {
+          widget: 'upload',
+          action: 'http://localhost:8080/api/minio/upload',
+          resReName: 'resource_id',
+          urlReName: 'url',
+          data:{'bucketName':'jsbucket'},
+          download: file => {
+            this.dowload();
+          },
+          change: file=>{
+            if (file.type=='success'){
+              file.fileList.splice(0,1)
+            }
+            console.log(file.fileList)
+          }
+        } as SFUploadWidgetSchema,
+      },
     },
     required: ['owner', 'callNo', 'href', 'description'],
   };
@@ -53,11 +83,7 @@ export class ProjectPropageEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // if (this.record.id > 0)
-    //   this.http.get(`/user/${this.record.id}`).subscribe(res => (this.i = res));
-    console.log(this.record)
     this.http.get(`http://localhost:8080/api/project/getProjectInfo/${this.record.id}`).subscribe((res: any) => {
-      // console.log(res)
       this.projectInfo = res.data;
     })
   }
@@ -67,6 +93,10 @@ export class ProjectPropageEditComponent implements OnInit {
       this.msgSrv.success('保存成功');
       this.modal.close(true);
     });
+  }
+
+  dowload():void{
+    window.location.href = `http://localhost:8080/api/minio/download?bucketName=jsbucket&file=run.sh`
   }
 
   close(): void {
