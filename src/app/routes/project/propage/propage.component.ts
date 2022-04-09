@@ -55,7 +55,14 @@ export class ProjectPropageComponent implements OnInit {
   ];
 
   constructor(private http: _HttpClient, private modal: ModalHelper) {
-    this.http.get(`http://localhost:8080/api/project/getProjectList?pageNum=${this.pi}&pageSize=${this.ps}`).subscribe((res: any) => {
+
+  }
+
+  ngOnInit(): void {
+    this.http.get(
+      `http://localhost:8080/api/project/getProjectList`,
+      {pageNum: this.pi, pageSize: this.ps}
+    ).subscribe((res: any) => {
       // console.log(res)
       this.url = Array(res.data.list.length).fill({}).map((item: any, idx: number) => {
         return {
@@ -74,9 +81,6 @@ export class ProjectPropageComponent implements OnInit {
       this.ps = res.data.pageSize;
       this.pi = res.data.pageNum;
     })
-  }
-
-  ngOnInit(): void {
   }
 
   change(e: any) {

@@ -1,14 +1,15 @@
-import { NgModule, Type } from '@angular/core';
-import { SharedModule } from '@shared';
-import { ProjectdetailsRoutingModule } from './projectdetails-routing.module';
-import { ProjectdetailsPropageComponent } from './propage/propage.component';
+import {NgModule, Type} from '@angular/core';
+import {SharedModule} from '@shared';
+import {ProjectdetailsRoutingModule} from './projectdetails-routing.module';
+import {ProjectdetailsPropageComponent} from './propage/propage.component';
 import {MaterialModule} from "../material/material.module";
-import {MaterialRoutingModule} from "../material/material-routing.module";
-import {MaterialPropageComponent} from "../material/propage/propage.component";
+import {ProjectdetailsProheaderComponent} from './proheader/proheader.component';
+import {ProjectdetailsProheaderService} from './proheader/proheader.service';
+import {NzDividerModule} from "ng-zorro-antd/divider";
 
 const COMPONENTS: Type<void>[] = [
   ProjectdetailsPropageComponent,
-
+  ProjectdetailsProheaderComponent
 ];
 
 @NgModule({
@@ -16,8 +17,12 @@ const COMPONENTS: Type<void>[] = [
     SharedModule,
     ProjectdetailsRoutingModule,
     MaterialModule,
-    MaterialRoutingModule
+    NzDividerModule,
   ],
   declarations: COMPONENTS,
+  providers: [
+    ProjectdetailsProheaderService
+  ],
 })
-export class ProjectdetailsModule { }
+export class ProjectdetailsModule {
+}

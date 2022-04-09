@@ -68,6 +68,13 @@
           "icon": "anticon-appstore",
           "badge": 2
         }
+      ,
+        {
+          "text": "项目列表2",
+          "link": "/project/propage",
+          "icon": "anticon-appstore",
+          "badge": 2
+        }
       ]
     },
     {

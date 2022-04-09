@@ -5,5 +5,15 @@
 </page-header>
 <nz-card>
   <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
-  <st #st [data]="url" [columns]="columns" [ps]="ps" [pi]="pi" [page]="pageInfo" [total]="total" (change)="change($event)"></st>
+  <st #st
+      [data]="url"
+      [columns]="columns"
+      [ps]="ps"
+      [pi]="pi"
+      [page]="pageInfo"
+      [total]="total"
+      (change)="change($event)"
+  >
+
+  </st>
 </nz-card>

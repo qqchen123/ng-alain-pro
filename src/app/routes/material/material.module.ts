@@ -27,6 +27,9 @@ const COMPONENTS: Type<void>[] = [
     MaterialPropageEditService,
     MaterialPropageViewService
   ],
+  exports: [
+    MaterialPropageComponent
+  ]
 })
 export class MaterialModule {
 }

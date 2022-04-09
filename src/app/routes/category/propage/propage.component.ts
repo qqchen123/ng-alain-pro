@@ -2,8 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {STColumn, STComponent, STPage, STReq, STRes} from '@delon/abc/st';
 import {SFDateWidgetSchema, SFSchema} from '@delon/form';
 import {ModalHelper, _HttpClient} from '@delon/theme';
-import { subWeeks } from 'date-fns';
+import {subWeeks} from 'date-fns';
 import {CategoryPropageEditComponent} from "./edit/edit.component";
+import {Router, NavigationExtras} from "@angular/router";
 
 @Component({
   selector: 'app-category-propage',
@@ -18,7 +19,7 @@ export class CategoryPropageComponent implements OnInit {
 
   reqInfo: STReq = {
     reName: {pi: 'pageNum', ps: 'pageSize'},
-    params: {proId: 123,projectName:'wwww',pmo:'ddd'}
+    params: {proId: 123, projectName: 'wwww', pmo: 'ddd'}
   }
 
   pageInfo: STPage = {
@@ -35,9 +36,15 @@ export class CategoryPropageComponent implements OnInit {
         type: 'string',
         title: '编号'
       },
-      start:{
+      start: {
         type: 'string',
-        ui: { widget: 'date', mode: 'range',end:'end',format:'yyyy/MM/dd HH:mm:ss',type:'datetime-local' } as SFDateWidgetSchema,
+        ui: {
+          widget: 'date',
+          mode: 'range',
+          end: 'end',
+          format: 'yyyy/MM/dd HH:mm:ss',
+          type: 'datetime-local'
+        } as SFDateWidgetSchema,
       },
 
       end: {
@@ -60,13 +67,19 @@ export class CategoryPropageComponent implements OnInit {
     {
       title: '',
       buttons: [
+        {
+          text: '详情', click: (item: any) => {
+            // console.log(item)
+            this.todetails(item.proId);
+          }
+        },
         // { text: '查看', click: (item: any) => `/form/${item.id}` },
         // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
       ]
     }
   ];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) {
+  constructor(private http: _HttpClient, private modal: ModalHelper, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -74,8 +87,19 @@ export class CategoryPropageComponent implements OnInit {
 
   add(): void {
     this.modal
-      .createStatic(CategoryPropageEditComponent, { i: { id: 0 } })
+      .createStatic(CategoryPropageEditComponent, {i: {id: 0}})
       .subscribe(() => this.st.reload());
+  }
+
+  todetails(proId: any) {
+    // this.router.navigate(['/projectdetails/propage']);
+    let queryParams: NavigationExtras = {
+      queryParams: {
+        'projectId': proId
+      }
+    }
+    this.router.navigate(['/projectdetails/propage'], queryParams);
+
   }
 
 }
