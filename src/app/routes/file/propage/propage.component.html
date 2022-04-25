@@ -1,9 +1,68 @@
-<page-header [action]="phActionTpl">
-  <ng-template #phActionTpl>
-    <button (click)="add()" nz-button nzType="primary">新建</button>
-  </ng-template>
-</page-header>
+<!--<page-header [action]="phActionTpl">-->
+<!--  <ng-template #phActionTpl>-->
+<!--    &lt;!&ndash;    <button (click)="add()" nz-button nzType="primary">新建</button>&ndash;&gt;-->
+<!--    <a [routerLink]="['/file/view']" [queryParams]="{id:''}" nz-button nzType="primary">新建</a>-->
+
+<!--  </ng-template>-->
+<!--</page-header>-->
 <nz-card>
-  <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>
-  <st #st [data]="url" [columns]="columns"></st>
+  <!--  <sf mode="search" [schema]="searchSchema" (formSubmit)="st.reset($event)" (formReset)="st.reset($event)"></sf>-->
+  <!--  <st #st [data]="url" [columns]="columns"></st>-->
+  <a [routerLink]="['/file/view']" [queryParams]="{id:'',cateId:cateId,projectId:projectId}" nz-button nzType="primary">新建</a>
+
+  <nz-table
+    nzShowSizeChanger
+    [nzData]="listOfRandomUser"
+    [nzFrontPagination]="false"
+    [nzLoading]="loading"
+    [nzTotal]="total"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    (nzQueryParams)="onQueryParamsChange($event)"
+    [nzSize]="'small'"
+    [nzPaginationType]="'small'"
+  >
+    <thead>
+    <tr>
+      <th nzColumnKey="fileName" nzCustomFilter>
+        FILE_NAME
+        <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+          <i nz-icon nzType="search"></i>
+        </nz-filter-trigger>
+      </th>
+      <th nzColumnKey="filePath">FILE_PATH</th>
+      <th nzColumnKey="createTime" [nzSortFn]="true">CREATE_TIME</th>
+      <th nzColumnKey="updateTime" [nzSortFn]="true">UPDATE_TIME</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of listOfRandomUser">
+      <td>{{ data.fileName }}</td>
+      <td>
+        <a nz-button nzType="primary" href="{{data.filePath}}">
+          <i nz-icon nzType="download"></i>
+          {{ data.fileName }}
+        </a>
+      </td>
+      <td>{{ data.createTime }}</td>
+      <td>
+        {{ data.updateTime }}
+      </td>
+      <td>
+        <a nz-button nzType="primary" [routerLink]="['/file/view']" [queryParams]="{id:data.fileId}">edit</a>
+        <button nz-button nzType="primary" (click)="delete(data.fileId)">delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+      <div class="search-box">
+        <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" />
+        <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+        <button nz-button nzSize="small" (click)="reset()">Reset</button>
+      </div>
+    </div>
+  </nz-dropdown-menu>
 </nz-card>

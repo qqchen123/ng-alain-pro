@@ -1,19 +1,29 @@
 <page-header
-  [title]="'title'"
+  [title]="projectName"
+  [content]="content"
   [tab]="tab"
 >
-<!--  <ng-template #breadcrumb>面包屑</ng-template>-->
-<!--  <ng-template #logo><div class="logo">logo</div></ng-template>-->
-<!--  <ng-template #action><div class="action">action</div></ng-template>-->
-<!--  <ng-template #content><div class="desc">content</div></ng-template>-->
-<!--  <ng-template #extra><div class="extra">extra</div></ng-template>-->
+<!--    <ng-template #breadcrumb>面包屑</ng-template>-->
+  <!--  <ng-template #logo><div class="logo">logo</div></ng-template>-->
+  <!--  <ng-template #action><div class="action">action</div></ng-template>-->
+  <ng-template #content>
+    <div class="desc">
+      <sf  #sf mode="edit" [schema]="schema" [compact]="true" [ui]="ui" [formData]="viewUser" button="none">
+        <div class="modal-footer">
+          <button nz-button type="button" (click)="goback()">返回</button>
+          <button nz-button type="submit" nzType="primary" (click)="save(sf.value)" >保存</button>
+        </div>
+      </sf>
+    </div>
+  </ng-template>
+  <!--  <ng-template #extra><div class="extra">extra</div></ng-template>-->
   <ng-template #tab>
-    <nz-tabset [nzSize]="'default'">
-      <nz-tab nzTitle=" M0 ">
-        <app-projectdetails-propage></app-projectdetails-propage>
-      </nz-tab>
-      <nz-tab nzTitle="T0"></nz-tab>
-      <nz-tab nzTitle="T1"></nz-tab>
+    <nz-tabset [nzSize]="'large'">
+      <div *ngFor="let item of procedureCate">
+        <nz-tab [nzTitle]="item.cateName">
+          <app-projectdetails-propage [projectId]="projectId" [cateId]="item.cateId"></app-projectdetails-propage>
+        </nz-tab>
+      </div>
     </nz-tabset>
   </ng-template>
 </page-header>
@@ -23,14 +33,11 @@
     color: #fff;
     height: 100%;
   }
+
   :host ::ng-deep h1.title {
     background: rgba(16, 142, 233, 1);
     color: #fff;
   }
-  :host ::ng-deep .action,
-  :host ::ng-deep .desc,
-  :host ::ng-deep .extra {
-    background: #7dbcea;
-    color: #fff;
-  }
+
+
 </style>

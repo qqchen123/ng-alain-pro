@@ -1,0 +1,53 @@
+<nz-spin [nzSpinning]="false">
+  <div class="main" *ngIf="projectInfo">
+    <div class="left">
+      <form nz-form nzLayout="vertical" (submit)="save()" se-container="1">
+        <se label="PROJECT_NAME" error="请输入PROJECT_NAME!">
+          <input nz-input name="projectName" [(ngModel)]="projectInfo.projectName" required/>
+        </se>
+        <se label="PMO">
+          <nz-select ngModel="N" name="pmo" required>
+            <nz-option nzLabel="Y" nzValue="Y"></nz-option>
+            <nz-option nzLabel="N" nzValue="N"></nz-option>
+          </nz-select>
+        </se>
+
+        <se label="SPONSOR">
+          <input nz-input name="sponsor" [(ngModel)]="projectInfo.sponsor">
+        </se>
+        <se label="TECHNOLOGY" error="请输入TECHNOLOGY!">
+          <input nz-input name="technology" [(ngModel)]="projectInfo.technology" required/>
+        </se>
+
+        <se label="CUSTOMER" error="请输入CUSTOMER!">
+          <input nz-input name="customer" [(ngModel)]="projectInfo.customer" required/>
+        </se>
+        <se label="APPLICATION" error="请输入APPLICATION!">
+          <input nz-input name="application" [(ngModel)]="projectInfo.application" required/>
+        </se>
+        <se label="FILE_PATH">
+          <input nz-input name="filePath" [(ngModel)]="projectInfo.filePath" >
+          <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+            <button nz-button>
+              <i nz-icon nzType="upload"></i>
+              Select File
+            </button>
+          </nz-upload>
+          <button
+            nz-button
+            [nzType]="'primary'"
+            [nzLoading]="uploading"
+            (click)="handleUpload()"
+            [disabled]="fileList.length === 0"
+            style="margin-top: 16px"
+          >
+            {{ uploading ? 'Uploading' : 'Start Upload' }}
+          </button>
+        </se>
+        <se>
+          <button nz-button nzType="primary">更新基本信息</button>
+        </se>
+      </form>
+    </div>
+  </div>
+</nz-spin>

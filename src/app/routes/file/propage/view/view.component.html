@@ -1,14 +1,43 @@
-<div class="modal-header">
-  <div class="modal-title">查看 {{ record.id }} 信息</div>
-</div>
-<nz-spin *ngIf="!i" class="modal-spin"></nz-spin>
-<div sv-container *ngIf="i">
-  <sv label="姓名">{{ i.owner }}</sv>
-  <sv label="会员卡号">32943898021309809423</sv>
-  <sv label="身份证">3321944288191034921</sv>
-  <sv label="联系方式">18112345678</sv>
-  <sv label="联系地址">曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口</sv>
-</div>
-<div class="modal-footer">
-  <button nz-button type="button" (click)="close()">关闭</button>
-</div>
+<page-header [title]="'编辑fileInfo'"> fileInfo </page-header>
+<nz-card [nzBordered]="false" *ngIf="fileInfo" >
+  <form nz-form [formGroup]="form" (ngSubmit)="submit()" se-container="1" labelWidth="200" style="width: 1000px">
+    <se label="PROJECT_NAME" error="请输入PROJECT_NAME" required>
+      <input nz-input formControlName="fileName" [(ngModel)]="fileInfo.fileName" placeholder="给目标起个名字" />
+    </se>
+    <se label="FILE_PATH">
+      <input nz-input  formControlName="filePath" [(ngModel)]="fileInfo.filePath" placeholder="请输入FILE_PATH" />
+      <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+        <button type="button" nz-button>
+          <i nz-icon nzType="upload"></i>
+          Select File
+        </button>
+      </nz-upload>
+      <button
+        type="button"
+        nz-button
+        [nzType]="'primary'"
+        [nzLoading]="uploading"
+        (click)="handleUpload()"
+        [disabled]="fileList.length === 0"
+        style="margin-top: 16px"
+      >
+        {{ uploading ? 'Uploading' : 'Start Upload' }}
+      </button>
+      <!--<a nz-button
+         type="button"
+         nzType="primary"
+         nzShape="round"
+         [href]="downloadUrl"
+         *ngIf="downloadUrl"
+      >
+        <i nz-icon nzType="download"></i>
+        Download
+      </a>-->
+    </se>
+
+    <se>
+      <button nz-button nzType="primary" [disabled]="form.invalid" type="submit" [nzLoading]="submitting">提交</button>
+      <button nz-button class="ml-sm" type="button" (click)="goback()">返回</button>
+    </se>
+  </form>
+</nz-card>

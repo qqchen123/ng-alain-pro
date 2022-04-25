@@ -8,8 +8,11 @@
   </div>
   <div nz-row>
     <div nz-col nzSpan="24">
-      <div *ngIf="item.cateId==21">
+      <div *ngIf="item.tableInfo=='material_info'">
         <app-material-propage [cateId]="item.cateId" [projectId]="projectId" ></app-material-propage>
+      </div>
+      <div *ngIf="item.tableInfo=='file_info'">
+        <app-file-propage [cateId]="item.cateId" [projectId]="projectId"></app-file-propage>
       </div>
     </div>
   </div>

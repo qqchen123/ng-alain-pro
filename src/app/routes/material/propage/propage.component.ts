@@ -25,7 +25,7 @@ export class MaterialPropageComponent implements OnInit {
   page = {
     front: false,
   }
-  url = `http://localhost:8080/api/material/allmaterialList`;
+  url = `http://localhost:8080/api/material/materialList`;
   resInfo: STRes = {
     reName: {total: "data.total", list: "data.list"}
   }
@@ -46,8 +46,12 @@ export class MaterialPropageComponent implements OnInit {
     properties: {
       category: {
         type: 'string',
-        title: '编号'
-      }
+        title: 'CATEGORY'
+      },
+      material: {
+        type: 'string',
+        title: 'MATERIAL'
+      },
     }
   };
   @ViewChild('st') private readonly st!: STComponent;
@@ -64,6 +68,7 @@ export class MaterialPropageComponent implements OnInit {
       title: '',
       buttons: [
         // { text: '查看', click: (item: any) => `/form/${item.id}` },
+        { text: '删除', click: (item: any) => `/form/${item.id}` },
         {
           text: '编辑', click: (item: any) => {
             console.log(item)
@@ -78,7 +83,7 @@ export class MaterialPropageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reqInfo.params.catId = this.cateId;
+    this.reqInfo.params.cateId = this.cateId;
     this.reqInfo.params.projectId = this.projectId;
   }
 
@@ -98,7 +103,7 @@ export class MaterialPropageComponent implements OnInit {
 
   materialList(params: any) {
     this.http.get(
-      `http://localhost:8080/api/material/allmaterialList`,
+      `http://localhost:8080/api/material/materialList`,
       params
     ).subscribe((res: any) => {
       this.material = res.data.list;

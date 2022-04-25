@@ -8,6 +8,7 @@ import { FilePropageEditComponent } from './propage/edit/edit.component';
 import { FilePropageEditService } from './propage/edit/edit.service';
 import { FilePropageViewComponent } from './propage/view/view.component';
 import { FilePropageViewService } from './propage/view/view.service';
+import {NzUploadModule} from "ng-zorro-antd/upload";
 
 const COMPONENTS: Type<void>[] = [
   FilePropageComponent,
@@ -15,16 +16,20 @@ const COMPONENTS: Type<void>[] = [
   FilePropageViewComponent];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    FileRoutingModule
-  ],
-  declarations: COMPONENTS,
-  providers: [
-    FileService,
-    FilePropageService,
-    FilePropageEditService,
-    FilePropageViewService
-  ],
+    imports: [
+        SharedModule,
+        FileRoutingModule,
+        NzUploadModule
+    ],
+    declarations: COMPONENTS,
+    providers: [
+        FileService,
+        FilePropageService,
+        FilePropageEditService,
+        FilePropageViewService
+    ],
+    exports: [
+        FilePropageComponent
+    ]
 })
 export class FileModule { }

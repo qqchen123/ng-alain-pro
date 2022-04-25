@@ -1,0 +1,61 @@
+<page-header [title]="'编辑projectInfo'"> PROJECTINFO。 </page-header>
+<nz-card [nzBordered]="false" *ngIf="projectInfo" >
+  <form nz-form [formGroup]="form" (ngSubmit)="submit()" se-container="1" labelWidth="200" style="width: 1000px">
+    <se label="PROJECT_NAME" error="请输入PROJECT_NAME" required>
+      <input nz-input formControlName="projectName" [(ngModel)]="projectInfo.projectName" placeholder="给目标起个名字" />
+    </se>
+    <se label="PMO" optionalHelp="目标的服务对象" error="请输入PMO">
+      <input nz-input formControlName="pmo" [(ngModel)]="projectInfo.pmo" placeholder="请描述PMO" />
+    </se>
+    <se label="SPONSOR">
+      <input nz-input formControlName="sponsor" [ngModel]="projectInfo.sponsor" placeholder="请输入SPONSOR" />
+    </se>
+    <se label="TECHNOLOGY">
+      <input nz-input formControlName="technology" [(ngModel)]="projectInfo.technology" placeholder="请输入TECHNOLOGY" />
+    </se>
+    <se label="CUSTOMER">
+      <input nz-input formControlName="customer" [(ngModel)]="projectInfo.customer" placeholder="请输入CUSTOMER" />
+    </se>
+    <se label="APPLICATION">
+      <input nz-input formControlName="application" [(ngModel)]="projectInfo.application" placeholder="请输入APPLICATION" />
+    </se>
+    <se label="KEY_WORDS">
+      <input nz-input formControlName="keyWords" [(ngModel)]="projectInfo.keyWords" placeholder="请输入KEY_WORDS" />
+    </se>
+    <se label="FILE_PATH">
+      <input nz-input  formControlName="filePath" [(ngModel)]="projectInfo.filePath" placeholder="请输入FILE_PATH" />
+      <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+        <button type="button" nz-button>
+          <i nz-icon nzType="upload"></i>
+          Select File
+        </button>
+      </nz-upload>
+      <button
+        type="button"
+        nz-button
+        [nzType]="'primary'"
+        [nzLoading]="uploading"
+        (click)="handleUpload()"
+        [disabled]="fileList.length === 0"
+        style="margin-top: 16px"
+      >
+        {{ uploading ? 'Uploading' : 'Start Upload' }}
+      </button>
+      <a nz-button
+         type="button"
+         nzType="primary"
+         nzShape="round"
+         [href]="downloadUrl"
+         *ngIf="downloadUrl"
+      >
+        <i nz-icon nzType="download"></i>
+        Download
+      </a>
+    </se>
+
+    <se>
+      <button nz-button nzType="primary" [disabled]="form.invalid" type="submit" [nzLoading]="submitting">提交</button>
+      <button nz-button class="ml-sm">保存</button>
+    </se>
+  </form>
+</nz-card>

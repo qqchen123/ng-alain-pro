@@ -1,45 +1,99 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { STColumn, STComponent } from '@delon/abc/st';
-import { SFSchema } from '@delon/form';
-import { ModalHelper, _HttpClient } from '@delon/theme';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {STColumn, STComponent} from '@delon/abc/st';
+import {SFSchema} from '@delon/form';
+import {ModalHelper, _HttpClient} from '@delon/theme';
+import {FilePropageEditComponent} from "./edit/edit.component";
+import {NzTableQueryParams} from "ng-zorro-antd/table";
 
 @Component({
   selector: 'app-file-propage',
   templateUrl: './propage.component.html',
+  styles: [
+    `
+      .search-box {
+        padding: 8px;
+      }
+
+      .search-box input {
+        width: 188px;
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .search-box button {
+        width: 90px;
+      }
+
+      .search-button {
+        margin-right: 8px;
+      }
+    `
+  ]
 })
 export class FilePropageComponent implements OnInit {
-  url = `/user`;
-  searchSchema: SFSchema = {
-    properties: {
-      no: {
-        type: 'string',
-        title: '编号'
-      }
-    }
-  };
-  @ViewChild('st') private readonly st!: STComponent;
-  columns: STColumn[] = [
-    { title: '编号', index: 'no' },
-    { title: '调用次数', type: 'number', index: 'callNo' },
-    { title: '头像', type: 'img', width: '50px', index: 'avatar' },
-    { title: '时间', type: 'date', index: 'updatedAt' },
-    {
-      title: '',
-      buttons: [
-        // { text: '查看', click: (item: any) => `/form/${item.id}` },
-        // { text: '编辑', type: 'static', component: FormEditComponent, click: 'reload' },
-      ]
-    }
-  ];
 
-  constructor(private http: _HttpClient, private modal: ModalHelper) { }
+  @Input()
+  cateId: any;
 
-  ngOnInit(): void { }
+  @Input()
+  projectId: any;
 
-  add(): void {
-    // this.modal
-    //   .createStatic(FormEditComponent, { i: { id: 0 } })
-    //   .subscribe(() => this.st.reload());
+  total = 1;
+  listOfRandomUser: any[] = [];
+  loading = true;
+  pageSize = 10;
+  pageIndex = 1;
+  fileDataUrl='http://localhost:8080/api/file/getFileList';
+  visible=false;
+  searchValue = '';
+
+  constructor(private http: _HttpClient) {
   }
 
+  ngOnInit(): void {
+    // console.log(this.projectId,'---',this.cateId)
+    this.getFileData()
+  }
+
+  getFileData() {
+    this.http.get(
+      this.fileDataUrl,
+      {pageNum:this.pageIndex,pageSize:this.pageSize,cateId:this.cateId,projectId:this.projectId}
+    ).subscribe((res:any)=>{
+      console.log(res)
+      this.loading=false;
+      this.listOfRandomUser = res.data.list;
+      this.total = res.data.total;
+    });
+  }
+
+  add() {
+
+  }
+
+  onQueryParamsChange($event: NzTableQueryParams) {
+
+  }
+
+  delete(id:any) {
+    // this.http.delete('').subscribe((res:any)=>{
+    //   console.log(res)
+    // });
+
+  }
+
+  search() {
+    // console.log(123123)
+    this.visible = false;
+    this.listOfRandomUser = this.listOfRandomUser.filter((item: any) => {
+      console.log(item)
+
+      return item.fileName.indexOf(this.searchValue) !== -1
+    });
+  }
+
+  reset() {
+    this.searchValue = '';
+    this.search();
+  }
 }

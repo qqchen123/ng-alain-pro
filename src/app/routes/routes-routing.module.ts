@@ -33,10 +33,8 @@ const routes: Routes = [
       {path: 'file', loadChildren: () => import('./file/file.module').then((m) => m.FileModule)},
       {path: 'material', loadChildren: () => import('./material/material.module').then((m) => m.MaterialModule)},
       {path: 'procedure', loadChildren: () => import('./procedure/procedure.module').then((m) => m.ProcedureModule)},
-      {
-        path: 'projectdetails',
-        loadChildren: () => import('./projectdetails/projectdetails.module').then((m) => m.ProjectdetailsModule)
-      }]
+      {path: 'projectdetails', loadChildren: () => import('./projectdetails/projectdetails.module').then((m) => m.ProjectdetailsModule)},
+      { path: 'fileupload', loadChildren: () => import('./fileupload/fileupload.module').then((m) => m.FileuploadModule) }]
   },
   // 空白布局
   // {

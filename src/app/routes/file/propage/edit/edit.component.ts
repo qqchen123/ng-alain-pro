@@ -13,11 +13,8 @@ export class FilePropageEditComponent implements OnInit {
   i: any;
   schema: SFSchema = {
     properties: {
-      no: { type: 'string', title: '编号' },
-      owner: { type: 'string', title: '姓名', maxLength: 15 },
-      callNo: { type: 'number', title: '调用次数' },
-      href: { type: 'string', title: '链接', format: 'uri' },
-      description: { type: 'string', title: '描述', maxLength: 140 },
+      fileName: { type: 'string', title: 'FILE_NAME'},
+      filePath: { type: 'string', title: 'FILE_PATH'},
     },
     required: ['owner', 'callNo', 'href', 'description'],
   };
@@ -50,7 +47,7 @@ export class FilePropageEditComponent implements OnInit {
   }
 
   save(value: any): void {
-    this.http.post(`/user/${this.record.id}`, value).subscribe(res => {
+    this.http.post(`http://localhost:8080/api/file/insertFile`, value).subscribe(res => {
       this.msgSrv.success('保存成功');
       this.modal.close(true);
     });

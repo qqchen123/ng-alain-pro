@@ -108,7 +108,7 @@ export class ProjectPropageComponent implements OnInit {
 
   add(): void {
     this.modal
-      .createStatic(ProjectPropageEditComponent, {record: {id: 10}})
+      .createStatic(ProjectPropageEditComponent, {record: {id: ''}})
       .subscribe(() => this.st.reload());
   }
 

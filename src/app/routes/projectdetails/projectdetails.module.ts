@@ -6,6 +6,9 @@ import {MaterialModule} from "../material/material.module";
 import {ProjectdetailsProheaderComponent} from './proheader/proheader.component';
 import {ProjectdetailsProheaderService} from './proheader/proheader.service';
 import {NzDividerModule} from "ng-zorro-antd/divider";
+import {FileuploadModule} from "../fileupload/fileupload.module";
+import {CategoryModule} from "../category/category.module";
+import {FileModule} from "../file/file.module";
 
 const COMPONENTS: Type<void>[] = [
   ProjectdetailsPropageComponent,
@@ -13,12 +16,15 @@ const COMPONENTS: Type<void>[] = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    ProjectdetailsRoutingModule,
-    MaterialModule,
-    NzDividerModule,
-  ],
+    imports: [
+        SharedModule,
+        ProjectdetailsRoutingModule,
+        MaterialModule,
+        NzDividerModule,
+        FileuploadModule,
+        CategoryModule,
+        FileModule,
+    ],
   declarations: COMPONENTS,
   providers: [
     ProjectdetailsProheaderService

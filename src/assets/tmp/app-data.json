@@ -50,6 +50,11 @@
           "children": []
         },
         {
+          "text": "文件列表",
+          "link": "/file/propage",
+          "icon": "anticon-appstore"
+        },
+        {
           "text": "项目列表",
           "link": "/category/propage",
           "icon": "anticon-appstore",
