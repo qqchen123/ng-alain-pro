@@ -4,80 +4,99 @@ import {_HttpClient} from '@delon/theme';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzModalRef} from 'ng-zorro-antd/modal';
 import {fi_FI} from "ng-zorro-antd/i18n";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzUploadFile} from "ng-zorro-antd/upload";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-material-propage-edit',
   templateUrl: './edit.component.html',
 })
 export class MaterialPropageEditComponent implements OnInit {
+  form!: FormGroup;
   record: any = {};
   i: any;
-  schema: SFSchema = {
-    properties: {
-      // no: { type: 'string', title: '编号' },
-      // owner: { type: 'string', title: '姓名', maxLength: 15 },
-      // callNo: { type: 'number', title: '调用次数' },
-      // href: { type: 'string', title: '链接', format: 'uri' },
-      // description: { type: 'string', title: '描述', maxLength: 140 },
-      category: {type: 'string', title: 'CATEGORY'},
-      material: {type: 'string', title: 'MATERIAL'},
-      projectId: {type: 'string', title: 'PROJECT_ID'},
-      cateId: {type: 'string', title: 'CATE_ID'},
-
-    },
-    // required: ['owner', 'callNo', 'href', 'description'],
-  };
-  ui: SFUISchema = {
-    '*': {
-      spanLabelFixed: 100,
-      grid: {span: 12},
-    },
-    $no: {
-      widget: 'text'
-    },
-    $href: {
-      widget: 'string',
-    },
-    $description: {
-      widget: 'textarea',
-      grid: {span: 24},
-    },
-  };
+  materialInfo:any={};
+  uploading = false;
+  fileList: NzUploadFile[] = [];
+  downloadBaseUrl='http://localhost:8080/api/minio/downloadFile';
+  submitting = false;
 
   constructor(
-    private modal: NzModalRef,
+    private fb: FormBuilder,
     private msgSrv: NzMessageService,
-    public http: _HttpClient,
-  ) {
-  }
+    private http: _HttpClient,
+    public route:ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
-    console.log(this.record)
-    if (this.record.id > 0){
-      this.http.get(`http://localhost:8080/api/material/getMaterial/${this.record.id}`).subscribe((res: any) => {
-        this.i = res.data;
-      })
-    }else{
-      this.i=1;
-    }
 
-  }
-
-  save(value: any): void {
-    console.log(value)
-    let url;
-    if (value.materialId){
-      url='http://localhost:8080/api/material/editMaterial';
-    }else {
-      url='http://localhost:8080/api/material/insertMaterial'
-    }
-    this.http.post(url, value).subscribe(res => {
-      this.msgSrv.success('保存成功');
-      this.modal.close(true);
+    this.route.queryParams.subscribe((data:any)=>{
+      // console.log(data)
+      this.materialInfo.cateId=data.cateId;
+      this.materialInfo.projectId=data.projectId;
+      if (data.id){
+        this.http.get(`http://localhost:8080/api/material/getMaterial/`+data.id).subscribe((res: any) => {
+          this.materialInfo = res.data;
+          // const split = this.materialInfo.filePath.split('/');
+          // this.downloadBaseUrl=this.downloadBaseUrl+'?bucketName='+split[3]+'&filePath='+split[4]+'/'+split[5]+'&originalName='+split[5];
+        })
+      }
+    })
+    //----------------------------------------------------------
+    this.form = this.fb.group({
+      category: [null, [Validators.required]],
+      material: [null, []],
     });
   }
 
   close(): void {
-    this.modal.destroy();
+  }
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    let fileList = [file];
+    fileList = fileList.slice(-1);
+    fileList = fileList.map(file => {
+      if (file.response) {
+        file.url = file.response.url;
+      }
+      return file;
+    });
+
+    this.fileList = fileList;
+    return false;
+  };
+
+  handleUpload(): void {
+    const formData = new FormData();
+    this.fileList.forEach((file: any) => {
+      formData.append('file', file);
+    });
+    this.uploading = true;
+    this.http.post("http://localhost:8080/api/minio/upload", formData).subscribe((res: any) => {
+      this.uploading = false;
+      this.materialInfo.filePath = res.data;
+    });
+  }
+
+  submit(): void {
+    this.submitting = true;
+    let url;
+
+    if (this.materialInfo.materialId){
+      url = 'http://localhost:8080/api/material/editMaterial';
+    }else{
+      url = 'http://localhost:8080/api/material/insertMaterial';
+    }
+    // console.log(this.fileInfo)
+    // return;
+    this.http.post(url, this.materialInfo).subscribe(res => {
+      // console.log(res)
+      this.submitting = false;
+    });
+  }
+
+  goback() {
+    window.history.go(-1);
   }
 }

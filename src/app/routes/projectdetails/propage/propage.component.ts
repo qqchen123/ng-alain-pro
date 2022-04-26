@@ -24,7 +24,6 @@ export class ProjectdetailsPropageComponent implements OnInit {
     this.activateRoute.queryParams.subscribe((data: any) => {
       this.projectId = data.projectId;
     })
-    console.log(this.cateId)
     this.getcateList();
   }
 

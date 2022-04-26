@@ -9,6 +9,7 @@ import {NzDividerModule} from "ng-zorro-antd/divider";
 import {FileuploadModule} from "../fileupload/fileupload.module";
 import {CategoryModule} from "../category/category.module";
 import {FileModule} from "../file/file.module";
+import {NzUploadModule} from "ng-zorro-antd/upload";
 
 const COMPONENTS: Type<void>[] = [
   ProjectdetailsPropageComponent,
@@ -24,6 +25,7 @@ const COMPONENTS: Type<void>[] = [
         FileuploadModule,
         CategoryModule,
         FileModule,
+        NzUploadModule,
     ],
   declarations: COMPONENTS,
   providers: [

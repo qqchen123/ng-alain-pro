@@ -8,6 +8,7 @@ import {MaterialPropageEditComponent} from './propage/edit/edit.component';
 import {MaterialPropageEditService} from './propage/edit/edit.service';
 import {MaterialPropageViewComponent} from './propage/view/view.component';
 import {MaterialPropageViewService} from './propage/view/view.service';
+import {NzUploadModule} from "ng-zorro-antd/upload";
 
 const COMPONENTS: Type<void>[] = [
   MaterialPropageComponent,
@@ -16,10 +17,11 @@ const COMPONENTS: Type<void>[] = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    MaterialRoutingModule
-  ],
+    imports: [
+        SharedModule,
+        MaterialRoutingModule,
+        NzUploadModule
+    ],
   declarations: COMPONENTS,
   providers: [
     MaterialService,

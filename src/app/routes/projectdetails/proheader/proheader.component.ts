@@ -3,100 +3,94 @@ import {_HttpClient} from '@delon/theme';
 import {ActivatedRoute} from "@angular/router";
 import {SFSchema, SFSelectWidgetSchema, SFUISchema, SFUploadWidgetSchema} from "@delon/form";
 import {NzMessageService} from "ng-zorro-antd/message";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {NzUploadFile} from "ng-zorro-antd/upload";
 
 @Component({
   selector: 'app-projectdetails-proheader',
   templateUrl: './proheader.component.html',
+  styles: [
+    `
+      .ant-advanced-search-form {
+        padding: 24px;
+        background: #fbfbfb;
+        border: 1px solid #d9d9d9;
+        border-radius: 6px;
+      }
+
+      .search-result-list {
+        margin-top: 16px;
+        border: 1px dashed #e9e9e9;
+        border-radius: 6px;
+        background-color: #fafafa;
+        min-height: 200px;
+        text-align: center;
+        padding-top: 80px;
+      }
+
+      [nz-form-label] {
+        overflow: visible;
+      }
+
+      nz-form-label {
+        width: 120px;
+      }
+
+      button {
+        margin-left: 8px;
+      }
+
+      .collapse {
+        margin-left: 8px;
+        font-size: 12px;
+      }
+    `
+  ]
 })
 export class ProjectdetailsProheaderComponent implements OnInit {
   projectId: any;
   projectName: any;
   procedureCate: any;
-  projectInfos: any;
-  viewUser:any;
+  projectInfos: any = {};
 
-  schema: SFSchema = {
-    properties: {
-      // no: { type: 'string', title: '编号' },
-      projectName: {type: 'string', title: '项目名称', maxLength: 50},
-      pmo: {
-        type: 'string',
-        title: 'PMO',
-        enum: [
-          {label: 'Y', value: 'Y'},
-          {label: 'N', value: 'N'},
-        ],
-        default: 'N',
-        ui: {
-          widget: 'select',
-          change: (value, orgData) => console.log(value, orgData),
-        } as SFSelectWidgetSchema,
-      },
-      sponsor: {type: 'string', title: 'SPONSOR'},
-      technology: {type: 'string', title: 'TECHNOLOGY', maxLength: 140},
-      customer: {type: 'string', title: 'CUSTOMER', maxLength: 140},
-      application: {type: 'string', title: 'APPLICATION', maxLength: 140},
-      keyWords: {type: 'string', title: 'KEY_WORDS', maxLength: 140},
-      filePath: {
-        type: 'string',
-        title: 'ATTACH_FILE',
-        limit:1,
-        enum: [
+  validateForm!: FormGroup;
 
-        ],
-        ui: {
-          widget: 'upload',
-          action: 'http://localhost:8080/api/minio/upload',
-          resReName: 'resource_id',
-          urlReName: 'url',
-          data:{'bucketName':'jsbucket'},
-          download: file => {
-            this.dowload();
-          },
-          change: file=>{
-            console.log(file)
-            if (file.type=='success'){
-              if (file.file.response.code==400){
-                this.msgSrv.error(file.file.response.data);
-              }else{
-                file.fileList.splice(0,1)
-                this.msgSrv.success(file.file.response.data);
-              }
-            }
-          }
-        } as SFUploadWidgetSchema,
-      },
-    },
-    required: ['owner', 'callNo', 'href', 'description'],
-  };
-  ui: SFUISchema = {
-    '*': {
-      spanLabelFixed: 100,
-      grid: { span: 8 },
-    },
-    $no: {
-      widget: 'text'
-    },
-    $href: {
-      widget: 'string',
-    },
-    $description: {
-      widget: 'textarea',
-      grid: { span: 24 },
-    },
-  };
+  fileInfo:any={};
+  uploading = false;
+  fileList: NzUploadFile[] = [];
 
-  constructor(private http: _HttpClient,private msgSrv: NzMessageService, public activateRoute: ActivatedRoute) {
+
+  resetForm(): void {
+    this.validateForm.reset();
+  }
+
+  constructor(
+    private http: _HttpClient,
+    private msgSrv: NzMessageService,
+    public activateRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {
     this.activateRoute.queryParams.subscribe((data: any) => {
       this.projectId = data.projectId;
       this.projectName = data.projectName;
-      // this.getProjectInfo(data.projectId);
+      this.getProjectInfos(data.projectId);
     })
   }
 
   ngOnInit(): void {
     this.getProcedureInfo();
-    this.getProjectInfos(4)
+
+
+    this.validateForm = this.fb.group({
+      projectName: [null, [Validators.required]],
+      pmo: [null, [Validators.required]],
+      sponsor: [null, [Validators.required]],
+      technology: [null, [Validators.required]],
+      customer: [null, [Validators.required]],
+      application: [null, [Validators.required]],
+      keyWords: [null, [Validators.required]],
+      filePath: [null, [Validators.required]],
+    });
   }
 
 
@@ -107,25 +101,14 @@ export class ProjectdetailsProheaderComponent implements OnInit {
   }
 
 
-  getProjectInfos(projectId:any) {
+  getProjectInfos(projectId: any) {
     this.http.get(`http://localhost:8080/api/project/getProjectInfo/${this.projectId}`).subscribe((res: any) => {
-      this.viewUser = res.data;
+      this.projectInfos = res.data;
     })
   }
-  dowload():void{
+
+  dowload(): void {
     window.location.href = `http://localhost:8080/api/minio/download?bucketName=jsbucket&file=run.sh`
-  }
-  save(value: any): void {
-    let url = '';
-    if (value.proId) {
-      url = 'http://localhost:8080/api/project/editPro';
-    } else {
-      url = 'http://localhost:8080/api/project/insertPro';
-    }
-    this.http.post(url, value).subscribe(res => {
-      this.msgSrv.success('保存成功');
-      // this.modal.close(true);
-    });
   }
 
   goback() {
@@ -133,4 +116,45 @@ export class ProjectdetailsProheaderComponent implements OnInit {
   }
 
 
+  submitForm() {
+    console.log(this.projectInfos)
+    // return;
+    let url;
+    if (this.projectInfos.proId) {
+      url = 'http://localhost:8080/api/project/editPro';
+    } else {
+      url = 'http://localhost:8080/api/project/insertPro';
+    }
+    this.http.post(url, this.projectInfos).subscribe(res => {
+      this.msgSrv.success('保存成功');
+    });
+  }
+
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    let fileList = [file];
+    fileList = fileList.slice(-1);
+    fileList = fileList.map(file => {
+      if (file.response) {
+        file.url = file.response.url;
+      }
+      return file;
+    });
+
+    this.fileList = fileList;
+    return false;
+  };
+
+  handleUpload(): void {
+    const formData = new FormData();
+    this.fileList.forEach((file: any) => {
+      formData.append('file', file);
+    });
+    this.uploading = true;
+    this.http.post("http://localhost:8080/api/minio/upload", formData).subscribe((res: any) => {
+      this.uploading = false;
+      // this.fileInfo.filePath = res.data;
+      this.projectInfos.filePath=res.data;
+    });
+  }
 }

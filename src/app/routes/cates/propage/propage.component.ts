@@ -30,13 +30,17 @@ export class CatesPropageComponent implements OnInit {
   }
   searchSchema: SFSchema = {
     properties: {
-      no: {
-        type: 'string',
-        title: '编号'
-      },
       cateName: {
         type: 'string',
-        title: '分类名称'
+        title: 'cateName'
+      },
+      tableInfo: {
+        type: 'string',
+        title: 'tableInfo'
+      },
+      parentCate: {
+        type: 'string',
+        title: 'parentCate'
       }
     }
   };
@@ -49,15 +53,21 @@ export class CatesPropageComponent implements OnInit {
     {
       title: '',
       buttons: [
-        {text: '查看'},
+
         {
-          text: '编辑', click: (item:any) => {
-            // console.log(item)
-            // return
+          text: '编辑', click: (item: any) => {
             let navigationExtras: NavigationExtras = {
-              queryParams: { 'id': item.cateId },
+              queryParams: {'id': item.cateId},
             };
-            this.router.navigate(['/cates/edit'],navigationExtras)
+            this.router.navigate(['/cates/edit'], navigationExtras)
+          }
+        },
+        {
+          text: '删除', click: (item: any) => {
+            this.http.get('http://localhost:8080/api/cate/deleteCate/' + item.cateId).subscribe((res: any) => {
+              console.log(res)
+              window.location.reload();
+            });
           }
         },
       ]

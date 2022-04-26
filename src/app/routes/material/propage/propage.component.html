@@ -1,33 +1,57 @@
+<nz-card>
+  <a [routerLink]="['/material/edit']" [queryParams]="{id:'',cateId:cateId,projectId:projectId}" nz-button
+     nzType="primary">新建</a>
 
-<div nz-row>
-  <div nz-col nzSpan="24">
-    <button (click)="add()" nz-button nzType="primary">新建</button>
-  </div>
-</div>
-<div nz-row>
-  <div nz-col nzSpan="24">
-    <nz-card>
-      <sf mode="search"
-          [schema]="searchSchema"
-          (formSubmit)="materialSubmit($event)"
-          (formReset)="st.reset($event)">
-      </sf>
-      <st #st
-          [data]="url"
-          [columns]="columns"
-          [req]="reqInfo"
-          [res]="resInfo"
-          [page]="pageInfo"
-          [total]="total"
-          [ps]="ps"
-          [pi]="pi"
-          [page]="page"
-          (change)="change($event)"
-          [bordered]="true"
-          [size]="'small'"
-          [expandAccordion]="true"
-      >
-      </st>
-    </nz-card>
-  </div>
-</div>
+  <nz-table
+    nzShowSizeChanger
+    [nzData]="listOfRandomUser"
+    [nzFrontPagination]="false"
+    [nzLoading]="loading"
+    [nzTotal]="total"
+    [nzPageSize]="pageSize"
+    [nzPageIndex]="pageIndex"
+    (nzQueryParams)="onQueryParamsChange($event)"
+    [nzSize]="'small'"
+    [nzPaginationType]="'small'"
+  >
+    <thead>
+    <tr>
+      <th nzColumnKey="category" nzCustomFilter>
+        CATEGORY
+        <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValue.length > 0" [nzDropdownMenu]="menu">
+          <i nz-icon nzType="search"></i>
+        </nz-filter-trigger>
+      </th>
+      <th nzColumnKey="material">MATERIAL</th>
+      <th nzColumnKey="createTime" [nzSortFn]="true">CREATE_TIME</th>
+      <th nzColumnKey="updateTime" [nzSortFn]="true">UPDATE_TIME</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of listOfRandomUser">
+      <td>{{ data.category }}</td>
+      <td>
+        {{ data.material }}
+      </td>
+      <td>{{ data.createTime }}</td>
+      <td>
+        {{ data.updateTime }}
+      </td>
+      <td>
+        <a nz-button nzType="primary" [routerLink]="['/material/edit']" [queryParams]="{id:data.materialId}">edit</a>
+        <button nz-button nzType="primary" (click)="delete(data.materialId)">delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+      <div class="search-box">
+        <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue"/>
+        <button nz-button nzSize="small" nzType="primary" (click)="search()" class="search-button">Search</button>
+        <button nz-button nzSize="small" (click)="reset()">Reset</button>
+      </div>
+    </div>
+  </nz-dropdown-menu>
+</nz-card>

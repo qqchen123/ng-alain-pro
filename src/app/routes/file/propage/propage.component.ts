@@ -51,7 +51,6 @@ export class FilePropageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log(this.projectId,'---',this.cateId)
     this.getFileData()
   }
 
@@ -60,7 +59,6 @@ export class FilePropageComponent implements OnInit {
       this.fileDataUrl,
       {pageNum:this.pageIndex,pageSize:this.pageSize,cateId:this.cateId,projectId:this.projectId}
     ).subscribe((res:any)=>{
-      console.log(res)
       this.loading=false;
       this.listOfRandomUser = res.data.list;
       this.total = res.data.total;
@@ -77,17 +75,13 @@ export class FilePropageComponent implements OnInit {
 
   delete(id:any) {
     // this.http.delete('').subscribe((res:any)=>{
-    //   console.log(res)
     // });
 
   }
 
   search() {
-    // console.log(123123)
     this.visible = false;
     this.listOfRandomUser = this.listOfRandomUser.filter((item: any) => {
-      console.log(item)
-
       return item.fileName.indexOf(this.searchValue) !== -1
     });
   }
